@@ -2,24 +2,24 @@
 
 # functions
 
-library(tidyverse)
 library(data.table)
-library(vroom)
+# library(vroom)
 library(here)
+library(tidyverse)
 
 source("R/functions.R")
 
 # globals ----
 region = "GOA"
-iters = 10
+iters = 2
 # data ----
 
-vroom::vroom(here::here("data", "strata.csv")) %>%
+read.csv(here::here("data", "strata.csv")) %>%
   filter(SURVEY==region) %>%
   rename_all(tolower) %>%
   dplyr::select(stratum, area) -> strata
 
-vroom::vroom(here::here("data", "lfreq.csv")) %>%
+lfreq <- read.csv(here::here("data", "lfreq.csv")) %>%
   filter(SURVEY==region, STRATUM %in% unique(strata$stratum)) %>%
   rename_all(tolower) %>%
   dplyr::select(year, species_code, stratum, hauljoin, sex, length, frequency) -> lfreq
